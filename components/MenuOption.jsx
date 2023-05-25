@@ -1,10 +1,17 @@
 import { Pressable, Text, View, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-export const MenuOption = ({ icon, title, subtitle, border = true }) => {
+export const MenuOption = ({
+  icon,
+  title,
+  subtitle,
+  border = true,
+  onPress,
+}) => {
   return (
     <Pressable
       style={border ? [styles.button, styles.buttonBorder] : styles.button}
+      onPress={onPress}
     >
       <View
         style={{
