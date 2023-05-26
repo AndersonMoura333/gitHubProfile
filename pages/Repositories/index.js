@@ -5,7 +5,7 @@ import { UserInformationContainer } from "../../components/UserInformationContai
 import { Footer } from "../../components/Footer";
 import { Item } from "../../components/Item";
 import { useEffect } from "react";
-export const Orgs = ({ route }) => {
+export const Repositories = ({ route }) => {
   const { user } = route.params;
   useEffect(() => {
     console.log("user", user);
@@ -21,15 +21,21 @@ export const Orgs = ({ route }) => {
       >
         <UserPrifile user={user} />
       </View>
-      <UserInformationContainer title={"Orgs"}>
-        {user.orgs.map((item, i) => {
+      <UserInformationContainer title={"Repositórios"}>
+        {user.repositories.map((item, i) => {
           return (
             <View key={i}>
               <Item
                 title={item.title}
-                description={item.description}
+                description={item.private ? "Private" : "Public"}
                 url={item.url}
-                icon={<FontAwesome5 name="headset" size={24} color="black" />}
+                icon={
+                  <MaterialCommunityIcons
+                    name="file-document-outline"
+                    size={24}
+                    color="black"
+                  />
+                }
               ></Item>
             </View>
           );

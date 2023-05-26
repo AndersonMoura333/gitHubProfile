@@ -3,6 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Bio } from "./pages/Bio";
 import Home from "./pages/Home";
 import { Orgs } from "./pages/Orgs";
+import { Repositories } from "./pages/Repositories";
+import { Friends } from "./pages/Friends";
 const Stack = createStackNavigator();
 export default function App() {
   return (
@@ -15,6 +17,8 @@ export default function App() {
         />
         <Stack.Screen name="Bio" component={Bio} />
         <Stack.Screen name="Orgs" component={Orgs} />
+        <Stack.Screen name="Repositórios" component={Repositories} />
+        <Stack.Screen name="Seguidores" component={Friends} />
       </Stack.Navigator>
     </NavigationContainer>
   );

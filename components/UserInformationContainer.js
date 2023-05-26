@@ -17,7 +17,6 @@ export const UserInformationContainer = ({ title, children }) => {
           style={{
             borderRadius: 14,
             backgroundColor: "#fff",
-            padding: 14,
             height: "90%",
             overflow: "scroll",
           }}

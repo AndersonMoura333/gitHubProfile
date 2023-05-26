@@ -17,7 +17,7 @@ export const Bio = ({ route }) => {
       </View>
 
       <UserInformationContainer title={"Biografia"}>
-        <Text style={{ fontSize: 16 }}>{user.bio}</Text>
+        <Text style={{ fontSize: 16, padding: 14 }}>{user.bio}</Text>
       </UserInformationContainer>
       <Footer location={user.location} />
     </View>

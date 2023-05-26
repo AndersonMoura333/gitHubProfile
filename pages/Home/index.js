@@ -28,29 +28,81 @@ export default function Home({ navigation }) {
     bio: "",
     location: "",
     publicRepos: "",
+    orgs: [],
+    repositories: [],
+    friends: [],
   });
+  const [hasUser, setHasUser] = useState(false);
+  const [userNotExist, setUserNotExist] = useState(false);
 
   const handlerSearchUser = async () => {
+    let orgs = [];
+    let repositories = [];
+    let friends = [];
+    await fetch(`https://api.github.com/users/${nickname}/orgs`)
+      .then((data) => data.json())
+      .then((json) => {
+        if (!json.message) {
+          json.map((item) =>
+            orgs.push({
+              title: item.login,
+              description: item.description,
+            })
+          );
+        } else {
+          setUserNotExist(true);
+        }
+      });
+    await fetch(`https://api.github.com/users/${nickname}/repos`)
+      .then((data) => data.json())
+      .then((json) => {
+        if (!json.message) {
+          json.map((item) => {
+            repositories.push({
+              title: item.name,
+              private: item.private,
+            });
+          });
+        }
+      });
+    await fetch(`https://api.github.com/users/${nickname}/followers`)
+      .then((data) => data.json())
+      .then((json) => {
+        if (!json.message) {
+          json.map((item) => {
+            friends.push({
+              name: item.login,
+              photo: item.avatar_url,
+            });
+          });
+        }
+      });
     await fetch(`https://api.github.com/users/${nickname}`)
       .then((data) => data.json())
       .then((json) => {
-        setUser({
-          name: json.name,
-          nickname: json.login,
-          photo: json.avatar_url,
-          followers: json.followers,
-          following: json.following,
-          bio: json.bio,
-          location: json.location,
-          publicRepos: json.public_repos,
-        });
-        setShowModal(false);
+        console.log("json", json);
+        if (!json.message) {
+          setUser({
+            name: json.name,
+            nickname: json.login,
+            photo: json.avatar_url,
+            followers: json.followers,
+            following: json.following,
+            bio: json.bio,
+            location: json.location,
+            publicRepos: json.public_repos,
+            orgs: orgs,
+            repositories: repositories,
+            friends: friends,
+          });
+          setShowModal(false);
+          setHasUser(true);
+        }
       });
   };
 
   const handlerMenuOption = (pageName) => {
     navigation.navigate(pageName, { user: user });
-    console.log("foi");
   };
   return (
     <View style={styles.container}>
@@ -89,13 +141,17 @@ export default function Home({ navigation }) {
           title={"Bio"}
           subtitle={"Um pouco sobre o usuário"}
           icon={<Ionicons name="person-outline" size={24} color="black" />}
-          onPress={() => handlerMenuOption("Bio")}
+          onPress={() => {
+            if (hasUser) handlerMenuOption("Bio");
+          }}
         ></MenuOption>
         <MenuOption
           title={"Orgs"}
           subtitle={"Organizações que o usuário faz parte"}
           icon={<FontAwesome5 name="headset" size={24} color="black" />}
-          onPress={() => handlerMenuOption("Orgs")}
+          onPress={() => {
+            if (hasUser) handlerMenuOption("Orgs");
+          }}
         ></MenuOption>
         <MenuOption
           title={"Repositórios"}
@@ -107,6 +163,9 @@ export default function Home({ navigation }) {
               color="black"
             />
           }
+          onPress={() => {
+            if (hasUser) handlerMenuOption("Repositórios");
+          }}
         ></MenuOption>
         <MenuOption
           title={"Seguidores"}
@@ -118,6 +177,9 @@ export default function Home({ navigation }) {
               color="black"
             />
           }
+          onPress={() => {
+            if (hasUser) handlerMenuOption("Seguidores");
+          }}
           border={false}
         ></MenuOption>
       </View>
@@ -133,6 +195,9 @@ export default function Home({ navigation }) {
               bio: "",
               location: "",
               publicRepos: "",
+              orgs: [],
+              repositories: [],
+              friends: [],
             });
           }}
           style={styles.resetInternView}
@@ -160,6 +225,13 @@ export default function Home({ navigation }) {
                 <FontAwesome name="search" size={36} color="black" />
               </Pressable>
             </View>
+            {userNotExist ? (
+              <Text style={{ marginTop: 6, color: "red" }}>
+                nickname Invalido
+              </Text>
+            ) : (
+              <></>
+            )}
           </View>
         </View>
       </Modal>
